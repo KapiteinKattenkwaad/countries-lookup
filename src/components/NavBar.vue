@@ -4,9 +4,12 @@
          :class="this.$store.state.theme">
         <div class="max-w-5xl mx-auto flex justify-between content-center px-4 py-3 ">
             <p>
-                Where in the world?
+                Geography Hub
             </p>
-            <div  >
+            <small>
+                Learn more about countries all over the world.
+            </small>
+            <div>
                 <button @click="toggleTheme">
                     <div v-if="this.$store.state.theme === 'theme-dark'">
                         Light mode
@@ -42,8 +45,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-button {
-    outline: none;
-    border: transparent;
-}
+    button {
+        outline: none;
+        border: transparent;
+    }
+
+    @media screen and (max-width: 690px) {
+        small {
+            display: none;
+        }
+    }
+
 </style>
