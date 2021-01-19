@@ -19,7 +19,7 @@
                         :class="this.$store.state.theme"
                         v-on:click="isHidden = true "
                         @change="getRegion"
-                        v-model.lazy="region"
+                        v-model="region"
                         name="region" id="region">
                     <option disabled value="">Select your region</option>
                     <option class="z-10" v-for="region in regions" :key="region.index"
