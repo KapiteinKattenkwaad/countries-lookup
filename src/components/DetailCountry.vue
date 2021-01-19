@@ -1,5 +1,5 @@
 <template>
-    <div class="detail-country  text-white">
+    <div class="detail-country">
         <Navbar/>
         <div class="detail-country-wrapper max-w-5xl mx-auto px-1">
             <router-link :to="{ name: 'Home'}">

@@ -1,11 +1,6 @@
 <template>
     <div class="all-countries max-w-5xl px-4 my-12 mx-auto"
     >
-        <button @click="toggleTheme">
-            toggle theme
-
-        </button>
-
         <div class="top-wrapper flex flex-col text-center md:text-left md:justify-between md:flex-row content-center">
             <div class="search">
                 <input
@@ -15,15 +10,19 @@
                         v-model="nameCountry"
                         placeholder="Search country">
             </div>
-            <div class="region mt-4  md:mt-0">
-
-                <select class="border border-solid "
+            <div class="region mt-4  md:mt-0 relative">
+                <label for="region"
+                       class="absolute select-region"
+                       v-if="isHidden === false ">
+                    Select your region</label>
+                <select class="border select border-solid cursor-pointer relative"
                         :class="this.$store.state.theme"
+                        v-on:click="isHidden = true "
                         @change="getRegion"
-                        v-model="region"
+                        v-model.lazy="region"
                         name="region" id="region">
-                    <option value="" key="0">Select your region</option>
-                    <option v-for="region in regions" :key="region.index"
+                    <option disabled value="">Select your region</option>
+                    <option class="z-10" v-for="region in regions" :key="region.index"
                             :value="region">
                         {{ region }}
                     </option>
@@ -35,19 +34,19 @@
             <div class="globe-wrapper flex justify-center flex-col text-center">
                 <img class="globe"
                      src="./../assets/icons/worldwide.svg" alt="globe">
-                <p>
+                <h5>
                     Loading
-                </p>
+                </h5>
             </div>
         </div>
         <div v-else class="countries-list flex flex-wrap justify-center md:justify-between">
             <div v-for="country in countries" :key="country.name">
 
-                <router-link :to="{ name: 'DetailCountry', params: { name: country.name }}">
+                <router-link :to="{ name: 'DetailCountry', params: { name: country.name.toLowerCase() }}">
 
                     <CountryCard
                             class="country-card flex flex-col flex-wrap rounded shadow-lg my-8"
-                            :class="this.$store.state.theme"
+
                             :country=country
                     >
                     </CountryCard>
@@ -79,21 +78,20 @@
         }
     }
 
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
-
-    .dropdown-content {
-        display: none;
+    .select-region {
         position: absolute;
-        min-width: 160px;
-        padding: 12px 16px;
-        z-index: 1;
+        top: 8px;
+        left: 12px;
+        z-index: 8;
+        @media screen and (max-width: 600px) {
+            left: 92px;
+        }
     }
 
-    .dropdown:hover .dropdown-content {
-        display: block;
+    .select {
+        width: 13rem;
+        border-radius: 3px;
+        padding: .5rem 0;
     }
 
     .search {
@@ -130,26 +128,26 @@
     import axios from 'axios'
     import CountryCard from "./CountryCard";
     import gsap from 'gsap'
-    import {mapGetters} from "vuex";
+
 
     export default {
         name: 'AllCountries',
-        components: {CountryCard},
+        components: {
+            CountryCard
+        },
         props: {},
         data() {
             return {
                 countries: null,
                 region: null,
                 nameCountry: null,
+                isHidden: false,
                 theme: 'theme-light',
                 regions: [
                     'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'
                 ],
                 loading: true,
             }
-        },
-        computed: {
-            ...mapGetters({theme: "getTheme"}),
         },
         watch: {
             theme(newTheme) {
@@ -165,7 +163,6 @@
                 .then(response => {
                     console.log(response.data[0])
                     this.countries = response.data
-
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -184,9 +181,6 @@
                 })
         },
         methods: {
-            toggleTheme() {
-                this.$store.dispatch("toggleTheme");
-            },
             getRegion() {
                 axios
                     .get(`https://restcountries.eu/rest/v2/region/${this.region}`)
@@ -210,6 +204,9 @@
                     })
 
             },
+            hideSelectLabel() {
+
+            }
         },
     }
 </script>

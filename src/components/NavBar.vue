@@ -7,9 +7,14 @@
                 Where in the world?
             </p>
             <div  >
-                <p >
-                    Dark mode
-                </p>
+                <button @click="toggleTheme">
+                    <div v-if="this.$store.state.theme === 'theme-dark'">
+                        Light mode
+                    </div>
+                    <div v-else>
+                        Dark mode
+                    </div>
+                </button>
             </div>
         </div>
 
@@ -18,14 +23,27 @@
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+
     export default {
         name: 'Navbar',
         props: {},
+        computed: {
+            ...mapGetters({theme: "getTheme"}),
+        },
+        methods: {
+            toggleTheme() {
+                this.$store.dispatch("toggleTheme");
+            },
+        },
 
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+button {
+    outline: none;
+    border: transparent;
+}
 </style>
