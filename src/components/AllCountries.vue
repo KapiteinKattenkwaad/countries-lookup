@@ -187,13 +187,6 @@
             toggleTheme() {
                 this.$store.dispatch("toggleTheme");
             },
-            /*   toggleTheme() {
-                   if (this.theme === 'theme-light') {
-                       this.theme = 'theme-dark'
-                   } else {
-                       this.theme = 'theme-light'
-                   }
-               },*/
             getRegion() {
                 axios
                     .get(`https://restcountries.eu/rest/v2/region/${this.region}`)
