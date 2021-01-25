@@ -161,7 +161,7 @@
             axios
                 .get('https://restcountries.eu/rest/v2/all')
                 .then(response => {
-                    console.log(response.data[0])
+                    console.log(response.data)
                     this.countries = response.data
                 })
                 .catch(function (error) {
@@ -179,6 +179,7 @@
                         });
                     })
                 })
+
         },
         methods: {
             getRegion() {
@@ -186,6 +187,7 @@
                     .get(`https://restcountries.eu/rest/v2/region/${this.region}`)
                     .then(response => {
                         this.countries = response.data
+                        console.log(this.countries)
                     })
                     .catch(function (error) {
                         console.log(error)

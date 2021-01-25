@@ -1,20 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
 import DetailCountry from '../components/DetailCountry'
+import Quiz from '../components/Quiz'
 
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
-        component: Home
+        name: 'Quiz',
+        component: Quiz
     },
     {
       path: '/country/:name',
       name: 'DetailCountry',
       component: DetailCountry,
+    },
+    {
+      path: '/quiz',
+      name: 'Quiz',
+      component: Quiz,
     },
 
 ]
