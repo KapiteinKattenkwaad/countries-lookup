@@ -96,7 +96,7 @@
         width: 160px;
         padding: 0 6px;
         height: 60px;
-        margin: 2rem auto;
+        margin: 0 auto;
         text-align: center;
         font-size: 1.5rem;
     }
