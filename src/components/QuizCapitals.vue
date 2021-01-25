@@ -230,7 +230,7 @@
                 .then(() => {
                     setTimeout(() => {
                         this.rightCountry = this.countries[Math.floor(Math.random() * this.countries.length)]
-                    }, 200)
+                    }, 500)
                 })
                 .then(() => {
                     setTimeout(() => {
