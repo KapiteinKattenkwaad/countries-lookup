@@ -4,14 +4,18 @@
         <div class="top-wrapper flex text-center justify-center flex-col content-center">
 
             <h4 class="title mt-12">
-                The capital of <b> {{ rightCountry.name }} </b> is:
+               Which country does this flag belong to?
             </h4>
+            <img
+                    class="h-24 w-32 "
+                    width="160px" height="120px"
+                    :src=rightCountry.flag :alt=rightCountry.name>
             <transition name="fade">
                 <div class="countries-wrapper">
                     <button class="randomcountries"
                             :disabled="isDisabled"
                             v-for="country in orderedUsers"
-                            :key="country.capital"
+                            :key="country.name"
                             @click="handleSelectItem(country)">
                         {{ country.capital }}
                     </button>
@@ -34,7 +38,11 @@
             </div>
 
             <p class="points my-3 ">
-                Points: {{ this.points }}
+               Points:  {{ points }}
+            </p>
+
+            <p class="points my-3 ">
+               Wrong:  {{ wrongPoints }}
             </p>
 
 
@@ -138,6 +146,14 @@
             border-color: white;
         }
     }
+
+    img {
+        margin: 12px auto;
+    }
+
+    .points {
+        text-transform: uppercase;
+    }
 </style>
 
 <script>
@@ -146,12 +162,13 @@
 
 
     export default {
-        name: 'AllCountries',
+        name: 'QuizFlags',
         components: {},
         props: {},
         data() {
             return {
                 points: 0,
+                wrongPoints: 0,
                 theme: 'theme-light',
                 randomCountries: [],
                 rightCountry: null,

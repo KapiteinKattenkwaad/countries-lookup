@@ -2,15 +2,21 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import DetailCountry from '../components/DetailCountry'
-import Quiz from '../components/QuizCapitals'
+import QuizCapitals from '../components/QuizCapitals'
+import QuizFlags from '../components/QuizFlags'
 
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        name: 'Quiz',
-        component: Quiz
+        name: 'QuizCapitals',
+        component: QuizCapitals
+    },
+    {
+        path: '/quiz-flags',
+        name: 'QuizFlags',
+        component: QuizFlags
     },
     {
       path: '/country/:name',
@@ -19,8 +25,8 @@ const routes = [
     },
     {
       path: '/quiz',
-      name: 'Quiz',
-      component: Quiz,
+        name: 'QuizCapitals',
+        component: QuizCapitals
     },
 
 ]
