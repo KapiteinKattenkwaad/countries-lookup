@@ -1,6 +1,7 @@
 <template>
     <div class="all-countries max-w-5xl px-4 my-12 mx-auto"
     >
+
         <div class="top-wrapper flex text-center justify-center flex-col content-center">
 
             <h4 class="title mt-12">
@@ -22,23 +23,23 @@
                 <transition name="fade">
                     <div v-if="isWrong" class="wrong">
                         <h3>
-                            Try again!
+                            TRY AGAIN!
                         </h3>
                     </div>
                     <div v-if="isRight" class="right">
                         <h3>
-                            Way to go!
+                           GOOD JOB!
                         </h3>
                     </div>
                 </transition>
             </div>
 
             <p class="points capitalize my-3 ">
-                Points: {{ points }}
+                CORRECT: {{ pointsRight }}
             </p>
 
             <p>
-                Wrong: {{ wrongPoints }}
+                INCORRECT: {{ wrongPoints }}
             </p>
 
             <button class="reset"
@@ -46,11 +47,32 @@
                 reset
             </button>
 
+            <router-link :to="{ name: 'QuizFlags'}">
+                <button class="other-game">
+                    Flag Game
+                </button>
+            </router-link>
+
         </div>
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
+
+    .title {
+        font-size: 1.4rem;
+    }
+
+    .other-game {
+        text-align: center;
+        display: block;
+        text-transform: uppercase;
+        border: .4px solid white;
+        border-radius: 3px;
+        padding: 6px;
+        width: 10rem;
+        margin: 1rem auto;
+    }
 
     .fade-enter-active,
     .fade-leave-active {
@@ -71,7 +93,8 @@
     }
 
     .feedback {
-        width: 120px;
+        width: 160px;
+        padding: 0 6px;
         height: 60px;
         margin: 2rem auto;
         text-align: center;
@@ -126,15 +149,20 @@
         }
     }
 
+    .points {
+        text-transform: uppercase;
+    }
+
     .reset {
         color: indianred;
         border: .4px solid indianred;
         border-radius: 3px;
         padding: 6px;
-        text-transform: capitalize;
-        width: 6rem;
+        text-transform: uppercase;
+        width: 10rem;
         transition: all .25s ease-in;
         margin: 1rem auto;
+
         &:hover {
             background: indianred;
             color: white;
@@ -154,7 +182,7 @@
         props: {},
         data() {
             return {
-                points: 0,
+                pointsRight: 0,
                 wrongPoints: 0,
                 theme: 'theme-light',
                 randomCountries: [],
@@ -172,6 +200,12 @@
                     ? document.querySelector("html").classList.remove("theme-dark")
                     : document.querySelector("html").classList.add("theme-dark");
             },
+            points(newPoints) {
+                localStorage.capitalPoints = newPoints;
+            },
+            pointsWrong(newWrongPoints) {
+                localStorage.capitalPointsWrong = newWrongPoints;
+            }
         },
 
         computed: {
@@ -181,6 +215,12 @@
         },
 
         mounted() {
+            if (localStorage.capitalPoints) {
+                this.pointsRight = Number(localStorage.capitalPoints);
+            }
+            if (localStorage.capitalPointsWrong) {
+                this.wrongPoints = Number(localStorage.capitalPointsWrong);
+            }
 
             axios
                 .get('https://restcountries.eu/rest/v2/all')
@@ -224,7 +264,8 @@
                 if (this.selectedItem.trim() === this.rightCountry.capital.trim()) {
                     this.isDisabled = true;
                     this.isRight = true;
-                    this.points++
+                    this.pointsRight++;
+                    localStorage.capitalPoints = this.pointsRight;
                     setTimeout(() => {
                         this.randomCountries = []
                         this.isRight = false;
@@ -236,6 +277,7 @@
                     this.isWrong = true;
                     this.isRight = false;
                     this.wrongPoints++;
+                    localStorage.capitalPointsWrong = this.wrongPoints
                     setTimeout(() => {
                         this.isWrong = false
                     }, 1200)
@@ -243,8 +285,10 @@
             },
 
             resetPoints() {
-                this.points = 0;
+                this.pointsRight = 0;
+                localStorage.capitalPoints = 0
                 this.wrongPoints = 0
+                localStorage.capitalPointsWrong = 0
             }
         },
     }

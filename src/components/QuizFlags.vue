@@ -1,6 +1,7 @@
 <template>
     <div class="all-countries max-w-5xl px-4 my-12 mx-auto"
     >
+
         <div class="top-wrapper flex text-center justify-center flex-col content-center">
 
             <h4 class="title mt-12">
@@ -17,7 +18,7 @@
                             v-for="country in orderedUsers"
                             :key="country.name"
                             @click="handleSelectItem(country)">
-                        {{ country.capital }}
+                        {{ country.name }}
                     </button>
                 </div>
             </transition>
@@ -26,23 +27,23 @@
                 <transition name="fade">
                     <div v-if="isWrong" class="wrong">
                         <h3>
-                            Try again!
+                            TRY AGAIN!
                         </h3>
                     </div>
                     <div v-if="isRight" class="right">
                         <h3>
-                            Way to go!
+                            GOOD JOB!
                         </h3>
                     </div>
                 </transition>
             </div>
 
             <p class="points my-3 ">
-               Points:  {{ points }}
+               CORRECT:  {{ pointsRight }}
             </p>
 
             <p class="points my-3 ">
-               Wrong:  {{ wrongPoints }}
+               INCORRECT:  {{ wrongPoints }}
             </p>
 
 
@@ -51,109 +52,22 @@
                 reset
             </button>
 
+            <router-link :to="{ name: 'QuizCapitals'}">
+                <button class="other-game">
+                    Capital Game
+                </button>
+            </router-link>
+
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 
-    .fade-enter-active,
-    .fade-leave-active {
-        transition: opacity .5s
-    }
-
-    .fade-enter,
-    .fade-leave-to {
-        opacity: 0
-    }
-
-    .right {
-        color: forestgreen;
-    }
-
-    .wrong {
-        color: indianred;
-    }
-
-    .feedback {
-        width: 120px;
-        height: 60px;
-        margin: 2rem auto;
-        text-align: center;
-        font-size: 1.5rem;
-    }
-
-    .countries-wrapper {
-        height: 220px;
-        width: 300px;
-        margin: 1rem auto;
-        animation: fly-in .3s ease;
-    }
-
-    .randomcountries {
-        border: 1px solid white;
-        border-radius: 60px;
-        padding: 8px;
-        text-align: center;
-        margin: 12px auto;
-        min-width: 11rem;
-        animation: fly-in .3s ease;
-        cursor: pointer;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, .15);
-        transition: all .3s ease;
-
-        &:hover {
-            box-shadow: none;
-            transform: translateY(-2px);
-        }
-    }
-
-    @keyframes fly-in {
-        0% {
-            opacity: .4;
-            transform: translateX(100px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    button {
-        display: block;
-    }
-
-    .country-card {
-        opacity: 0;
-        transition: all .3s ease;
-
-        &:hover {
-        }
-    }
-
-    .reset {
-        color: indianred;
-        border: .4px solid indianred;
-        border-radius: 3px;
-        padding: 6px;
-        text-transform: capitalize;
-        width: 6rem;
-        transition: all .25s ease-in;
-        margin: 1rem auto;
-        &:hover {
-            background: indianred;
-            color: white;
-            border-color: white;
-        }
-    }
-
     img {
         margin: 12px auto;
     }
 
-    .points {
-        text-transform: uppercase;
-    }
 </style>
 
 <script>
@@ -167,7 +81,7 @@
         props: {},
         data() {
             return {
-                points: 0,
+                pointsRight: 0,
                 wrongPoints: 0,
                 theme: 'theme-light',
                 randomCountries: [],
@@ -185,15 +99,28 @@
                     ? document.querySelector("html").classList.remove("theme-dark")
                     : document.querySelector("html").classList.add("theme-dark");
             },
+            points(newPoints) {
+                localStorage.flagPoints = newPoints;
+            },
+            pointsWrong(newWrongPoints) {
+                localStorage.flagPointsWrong = newWrongPoints;
+            }
         },
 
         computed: {
             orderedUsers: function () {
                 return _.orderBy(this.randomCountries, 'name')
             },
+
         },
 
         mounted() {
+            if (localStorage.flagPoints) {
+                this.pointsRight = Number(localStorage.flagPoints);
+            }
+            if (localStorage.flagPointsWrong) {
+                this.wrongPoints = Number(localStorage.flagPointsWrong);
+            }
 
             axios
                 .get('https://restcountries.eu/rest/v2/all')
@@ -237,7 +164,8 @@
                 if (this.selectedItem.trim() === this.rightCountry.capital.trim()) {
                     this.isDisabled = true;
                     this.isRight = true;
-                    this.points++
+                    this.pointsRight++
+                    localStorage.flagPoints = this.pointsRight
                     setTimeout(() => {
                         this.randomCountries = []
                         this.isRight = false;
@@ -249,6 +177,7 @@
                     this.isWrong = true;
                     this.isRight = false;
                     this.wrongPoints++;
+                    localStorage.flagPointsWrong = this.wrongPoints
                     setTimeout(() => {
                         this.isWrong = false
                     }, 1200)
@@ -256,7 +185,11 @@
             },
 
             resetPoints() {
-                this.points = 0
+                this.pointsRight = 0
+                this.points = 0;
+                localStorage.flagPoints = 0
+                this.wrongPoints = 0
+                localStorage.flagPointsWrong = 0
             }
         },
     }
