@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import DetailCountry from '../components/DetailCountry'
-import Quiz from '../components/Quiz'
+import Quiz from '../components/QuizCapitals'
 
 Vue.use(VueRouter)
 

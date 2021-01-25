@@ -34,7 +34,11 @@
             </div>
 
             <p class="points capitalize my-3 ">
-                Points: {{ this.points }}
+                Points: {{ points }}
+            </p>
+
+            <p>
+                Wrong: {{ wrongPoints }}
             </p>
 
             <button class="reset"
@@ -151,6 +155,7 @@
         data() {
             return {
                 points: 0,
+                wrongPoints: 0,
                 theme: 'theme-light',
                 randomCountries: [],
                 rightCountry: null,
@@ -229,7 +234,8 @@
                     }, 800)
                 } else {
                     this.isWrong = true;
-                    this.isRight = false
+                    this.isRight = false;
+                    this.wrongPoints++;
                     setTimeout(() => {
                         this.isWrong = false
                     }, 1200)
@@ -237,7 +243,8 @@
             },
 
             resetPoints() {
-                this.points = 0
+                this.points = 0;
+                this.wrongPoints = 0
             }
         },
     }

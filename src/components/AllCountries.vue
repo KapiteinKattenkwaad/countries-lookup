@@ -131,7 +131,7 @@
 
 
     export default {
-        name: 'AllCountries',
+        name: 'Quiz',
         components: {
             CountryCard
         },
